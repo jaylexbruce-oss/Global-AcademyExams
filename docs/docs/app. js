@@ -1,0 +1,56 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCg0x5T8vv63OStDAqw-Ae2PdD12FWGBgg",
+  authDomain: "global-academy-of-tests.firebaseapp.com",
+  projectId: "global-academy-of-tests",
+  storageBucket: "global-academy-of-tests.firebasestorage.app",
+  messagingSenderId: "338927710684",
+  appId: "1:338927710684:web:1ed725d18238e87573df19"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Reference to Firebase Database
+const db = firebase.database();
+
+// --- Login Function ---
+function loginUser() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (username === "" || password === "") {
+        alert("Please enter both username and password.");
+        return;
+    }
+
+    // Check from Firebase
+    db.ref("users/" + username).once("value")
+        .then(snapshot => {
+            if (!snapshot.exists()) {
+                alert("User does not exist!");
+                return;
+            }
+
+            const data = snapshot.val();
+
+            if (data.password === password) {
+                alert("Login successful!");
+                window.location.href = "exam.html";
+            } else {
+                alert("Incorrect password!");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Something went wrong!");
+        });
+}
